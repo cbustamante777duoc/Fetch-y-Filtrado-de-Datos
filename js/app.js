@@ -2,11 +2,19 @@ const input2 = document.querySelector('#searchInput');
 const usersList = document.querySelector('#users');
 console.log(usersList);
 
+let users = [];//guarda respuesta api
+
 window.addEventListener('DOMContentLoaded', async () => {
+
+  //cuando carga los datos desde la api
+  usersList.innerHTML = '<h1>loding</h1>';
+
   const data = await loadUsers();
-  renderUser(data.data);//envio de la respuesta
+  users = data.data;
+  renderUser(users);//envio de la respuesta
 
 });
+
 
 //carga datos api
 async function loadUsers() {
@@ -14,10 +22,19 @@ async function loadUsers() {
   return await response.json();
 }
 
-//escucha que escribe el usuario 
+/** 
+ * 1) escucha el evento keyup
+ * 2) todo a miniscula toLowerCase 
+ * 3) filtra 
+ */
 input2.addEventListener('keyup', (e) => {
-  console.log(input2.value);
+  const userFilter = users.filter(user => `${user.firstname.toLowerCase()} 
+  ${user.lastname.toLowerCase()}`.includes(input2.value.toLowerCase()));
+  renderUser(userFilter);
 });
+
+
+
 
 //crea los li que se van a mostrar
 //el join quita las ,
